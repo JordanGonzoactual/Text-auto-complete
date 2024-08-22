@@ -22,7 +22,7 @@ class Testtrie(unittest.TestCase):
     def test_insert(self):     
         self.trie.insertchar("Hello") 
         self.assertTrue(self.trie.findchar("Hello"))
-        self.assertFalse(self.trie.findchar("Hell"))
+        self.assertFalse(self.trie.findchar("hell"))
         self.assertFalse(self.trie.findchar("Helloo"))
         self.assertFalse(self.trie.findchar("world"))
            
@@ -32,7 +32,7 @@ class Testtrie(unittest.TestCase):
     def test_startswith(self):       
         self.trie.insertchar("Hello")
         self.assertTrue(self.trie.startswith("He"))
-        self.assertTrue(self.trie.startswith("Hell"))
+        self.assertTrue(self.trie.startswith("hell"))
         self.assertTrue(self.trie.startswith("Hello"))
         self.assertFalse(self.trie.startswith("Helloo"))
         self.assertFalse(self.trie.startswith("world"))

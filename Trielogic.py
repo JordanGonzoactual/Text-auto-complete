@@ -1,5 +1,5 @@
 import nltk
-import os
+
 
 # Class for Trie node
 class TrieNode:
@@ -18,6 +18,7 @@ class Trie(object):
        
      # Inserts char into trie
     def insertchar(self, word):
+        word = word.casefold()
         current = self.root
        
         for i, char in enumerate(word):
@@ -33,6 +34,7 @@ class Trie(object):
 
         # Finds char in trie
     def findchar(self, word):
+        word = word.casefold()
         current = self.root
       
         for char in word:
@@ -46,6 +48,7 @@ class Trie(object):
 
      #looks for prefix in node
     def startswith(self, prefix):
+        prefix = prefix.casefold()
         current = self.root
         
         for char in prefix:
