@@ -1,5 +1,5 @@
 from nltk.corpus import gutenberg
-from nltk.tokenize import sent_tokenize, word_tokenize
+from nltk.tokenize import word_tokenize
 import nltk
 
 nltk.download('punkt')
@@ -12,11 +12,13 @@ class wordsource(object):
      # Initializer
     def __init__(self,):
         self.text = gutenberg.raw('austen-emma.txt')
-        self.actualtext = self.text[:1000]
+        self.actualtext = self.text[:500000]
         self.source = str(self.actualtext)
         self.tokenized = self.tokenizewords()
         self.cleaned = self.cleantokens()
-        self.sequnced = self.charsequence()
+        self.sequenced = self.charsequence()
+        self.words = [self.sequenced]
+      
        
       
 
@@ -39,4 +41,7 @@ class wordsource(object):
         self.char_sequence = [list(word) for word in cleanedtokens]
         return self.char_sequence
 
+if __name__== "__main__":
+    wordsource()
+    
     

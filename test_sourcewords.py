@@ -12,9 +12,9 @@ class test_wordsource(unittest.TestCase):
     def setUp(self):
             self.words_source = wordsource()
             self.text = gutenberg.raw('austen-emma.txt')
-            self.actualtext = self.text[:1000]
+            self.actualtext = self.text[:500000]
             self.source = str(self.actualtext)
-            print(f"text = {self.actualtext}")
+            print(f"text = {self.test_charsequence}")
             logging.debug(f"SetUP: {self.words_source} Initialized")
         
 
@@ -22,21 +22,21 @@ class test_wordsource(unittest.TestCase):
     
      # Tests tokenize method
     def test_tokenize(self):
-        tokens = self.words_source.tokenizewords()
-        self.assertTrue((tokens))
+        self.tokens = self.words_source.tokenizewords()
+        self.assertTrue((self.tokens))
     
 
 
      # tests clean tokens method
     def test_cleantokens(self):
-        clean_tokens = self.words_source.cleantokens()
-        self.assertTrue((clean_tokens))
+        self.clean_tokens = self.words_source.cleantokens()
+        self.assertTrue((self.clean_tokens))
 
 
      # tests char sequence method
     def test_charsequence(self):
-        char_sequence = self.words_source.charsequence()
-        self.assertTrue((char_sequence))
+        self.char_sequence = self.words_source.charsequence()
+        self.assertTrue((self.char_sequence))
 
 if __name__ == "__main__":
     unittest.main()
