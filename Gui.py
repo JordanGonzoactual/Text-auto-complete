@@ -4,7 +4,10 @@ from tkinter import *
 from PIL import Image, ImageTk
 from trielogic import Trie
 from sourcewords import wordsource
+import logging
 
+
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 # Class for interface
@@ -15,10 +18,13 @@ class interface(tk.Tk):
         self.master = master
         self.title("Typemaster")
         self.geometry('1920x1080')
+        logging.debug(f"Creating title:{self.title}, Windowsiz: {self.geometry}")
         self.trie = Trie()
-        self.words = wordsource()
+        self.word_source = wordsource()
         self.add_background()
         self.addwidgets()
+        self.populatetrie(self.word_source.listofwords())
+        logging.debug(f"Creating background: {self.add_background} and widgets: {self.addwidgets}")
         
 
      # Adds widgets to GUI
@@ -29,7 +35,7 @@ class interface(tk.Tk):
         self.entryframe.place(x= 600, y= 200)
         self.entryframe.winfo_width()
         self.entryframe.winfo_height()
-         
+        logging.debug(f"Creating entry frame with properties: {self.entryframe.winfo_width}, {self.entryframe.winfo_height}")
          # Records User input
         self.User_input= tk.StringVar()
        
@@ -37,12 +43,17 @@ class interface(tk.Tk):
          # Entry box 
         self.entrybox = tk.Entry(self.entryframe, textvariable= self.User_input, bg='white')
         self.entrybox.place(x = 2, y =2, height= 25, width = 296, in_= self.entryframe)
+        self.entrybox.winfo_width()
+        self.entrybox.winfo_height()
         self.entrybox.bind('<Any-KeyPress>', self.typepress)
+        logging.debug(f"Creating entry box with properties: {self.entrybox.winfo_height}, {self.entrybox.winfo_width}")
 
          # Drop down menu
+        
+        
        
      # Handles Event for Key press
-    def typepress(self):
+    def typepress(self, *args):
          # Retrieves user input and cleans it
         user_input_raw = self.User_input.get()
         user_input_cleaned = user_input_raw.casefold()
@@ -51,25 +62,30 @@ class interface(tk.Tk):
         self.auto_complete(self.input_received)
      
      # Handles auto complete logic
-    def auto_complete(self, word_to_automate):
+    def auto_complete(self, word_to_automate):        
         word_to_automate = self.input_received
-        self.trie.startswith(self, prefix = word_to_automate)
-         # for suggesstions
-        for suggestion in self.trie.startswith():
-            self.optionsmenu.insert(tk.END, suggestion)
-         # Handles list box if suggestion
-        if suggestion:
-            self.optionsmenu = tk.Listbox(self)
-            self.optionsmenu.place(x= 600, y=229)
-         # Handles suggestion if no suggestion
-        elif not suggestion:
+        suggestions = self.trie.startswith(word_to_automate)
+        try: 
+      
+            if suggestions:
+                self.optionsmenu = tk.Listbox(self)
+                self.optionsmenu.delete(0, tk.END)
+                self.optionsmenu.place(x=600, y=229)
+                for suggestion in suggestions:
+                    self.optionsmenu.insert(tk.END, suggestion)
+                
+            else:
+                logging.debug(f"No suggestions for: {word_to_automate}")
             self.optionsmenu.place_forget()
-    
+        except TypeError as e:
+            logging.debug(f"Type error: {e}")
+
     def populatetrie(self, words):
-        self.words()
+        self.word_source.listofwords()
          # Inserts words from wordsource to trie structure
-        for words in self.words:
+        for words in self.word_source.listofwords():
             self.trie.insertchar(words)
+            
             
 
 

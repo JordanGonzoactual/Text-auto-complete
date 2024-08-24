@@ -2,22 +2,27 @@ from nltk.corpus import gutenberg
 from nltk.tokenize import word_tokenize
 import nltk
 
-nltk.download('punkt')
-nltk.download('punkt_tab')
+
 
 
 
 # Class to prep words from source for trie structure
 class wordsource(object):
      # Initializer
-    def __init__(self,):
+    def __init__(self):
         self.text = gutenberg.raw('austen-emma.txt')
-        self.actualtext = self.text[:500000]
+        self.actualtext = self.text[:1000]
         self.source = str(self.actualtext)
         self.tokenized = self.tokenizewords()
         self.cleaned = self.cleantokens()
-        self.sequenced = self.charsequence()
-        self.words = [self.sequenced]
+        self.tokenizewords()
+        self.cleantokens()
+        self.charsequence()
+        self.listofwords()
+        #print(str(self.listofwords()))
+
+        
+   
       
        
       
@@ -40,6 +45,15 @@ class wordsource(object):
         cleanedtokens = self.cleaned
         self.char_sequence = [list(word) for word in cleanedtokens]
         return self.char_sequence
+
+     # Returns list of words
+    def listofwords(self):
+    
+        return [''.join(word) for word in self.char_sequence]
+    
+ 
+
+
 
 if __name__== "__main__":
     wordsource()
