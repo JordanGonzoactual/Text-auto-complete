@@ -11,7 +11,7 @@ class wordsource(object):
      # Initializer
     def __init__(self):
         self.text = gutenberg.raw('austen-emma.txt')
-        self.actualtext = self.text[:1000]
+        self.actualtext = self.text[:10000]
         self.source = str(self.actualtext)
         self.tokenized = self.tokenizewords()
         self.cleaned = self.cleantokens()

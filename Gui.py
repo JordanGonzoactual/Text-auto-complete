@@ -45,10 +45,11 @@ class interface(tk.Tk):
         self.entrybox.place(x = 2, y =2, height= 25, width = 296, in_= self.entryframe)
         self.entrybox.winfo_width()
         self.entrybox.winfo_height()
-        self.entrybox.bind('<Any-KeyPress>', self.typepress)
+        self.entrybox.bind('<Any-KeyRelease>', self.typepress)
         logging.debug(f"Creating entry box with properties: {self.entrybox.winfo_height}, {self.entrybox.winfo_width}")
 
          # Drop down menu
+        
         
         
        
@@ -63,16 +64,24 @@ class interface(tk.Tk):
      
      # Handles auto complete logic
     def auto_complete(self, word_to_automate):        
-        word_to_automate = self.input_received
-        suggestions = self.trie.startswith(word_to_automate)
+        word_to_automate = self.input_received        
+        logging.debug(F" Word is {word_to_automate}")
+        
+        node = self.trie.startswith(word_to_automate)
+       
+        
         try: 
-      
-            if suggestions:
+             
+            if node:                
+                suggestions = self.trie.get_suggestions_from_node(node)
                 self.optionsmenu = tk.Listbox(self)
+                self.optionsmenu.bind('<KeyRelease>', self.auto_complete)
                 self.optionsmenu.delete(0, tk.END)
-                self.optionsmenu.place(x=600, y=229)
+                 # If suggestions then place suggestion box dynamically
                 for suggestion in suggestions:
+                   
                     self.optionsmenu.insert(tk.END, suggestion)
+                    self.optionsmenu.place(x=600, y=229)
                 
             else:
                 logging.debug(f"No suggestions for: {word_to_automate}")
