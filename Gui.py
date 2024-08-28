@@ -63,17 +63,27 @@ class interface(tk.Tk):
         user_input_cleaned = user_input_raw.casefold()
          # Receives clean user input and sends to auto complete method
         self.input_received = user_input_cleaned   
+         # finds current word
+        self.splitwords()
+        
+        if not self.current_word.strip():
+            self.optionsmenu.place_forget()
+            return
+       
+        self.auto_complete(self.current_word)
+
+    def splitwords(self):
          # Searches for space in words
         last_space_index = self.input_received.rfind(' ',0)
-      
+         # Establishes current word if space between words
         if last_space_index != -1:
             currentindex = self.input_received[last_space_index + 1:]
             self.current_word = currentindex
         else:
             self.current_word = self.input_received
-       
-       
-        self.auto_complete(self.current_word)
+
+
+
 
 
      # Handles auto complete logic
@@ -82,13 +92,12 @@ class interface(tk.Tk):
         word_to_automate = self.current_word       
         logging.debug(F" Word is {word_to_automate}")
         node_a = self.trie.startswith(word_to_automate)
-       
+        self.optionsmenu.place_forget()
            
         try: 
              # Creates list box for suggestions
             if node_a:                
-                suggestions = self.trie.get_suggestions_from_node(node_a)
-                               
+                suggestions = self.trie.get_suggestions_from_node(node_a)                               
                 self.optionsmenu.delete(0, tk.END)
                  # For suggestions in lsit box
                 for suggestion in suggestions:
@@ -115,6 +124,8 @@ class interface(tk.Tk):
             last_space_index = self.input_received.rfind(' ')
             self.entrybox.delete(last_space_index + 1,tk.END)
             self.entrybox.insert(tk.END,  selected_item)  
+            self.optionsmenu.place_forget()
+
            
 
     
