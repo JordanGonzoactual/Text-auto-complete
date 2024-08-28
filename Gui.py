@@ -48,84 +48,85 @@ class interface(tk.Tk):
         self.entrybox.bind('<Any-KeyRelease>', self.typepress)
         logging.debug(f"Creating entry box with properties: {self.entrybox.winfo_height}, {self.entrybox.winfo_width}")
 
-         # Drop down menu
-        
-        
-        
-       
+
+         # suggestions menu
+        self.optionsmenu = tk.Listbox(self)
+        self.optionsmenu.bind('<<ListboxSelect>>', self.clicked_suggestion)
+        self.optionsmenu.place(x=600, y=229)
+        self.optionsmenu.place_forget()
+                     
+              
      # Handles Event for Key press
     def typepress(self, *args):
          # Retrieves user input and cleans it
         user_input_raw = self.User_input.get()
         user_input_cleaned = user_input_raw.casefold()
          # Receives clean user input and sends to auto complete method
-        self.input_received = user_input_cleaned
-        self.auto_complete(self.input_received)
-     
-     # Handles auto complete logic
-    def auto_complete(self, word_to_automate):        
-        word_to_automate = self.input_received        
-        logging.debug(F" Word is {word_to_automate}")
-        
-        node = self.trie.startswith(word_to_automate)
+        self.input_received = user_input_cleaned   
+         # Searches for space in words
+        last_space_index = self.input_received.rfind(' ',0)
+      
+        if last_space_index != -1:
+            currentindex = self.input_received[last_space_index + 1:]
+            self.current_word = currentindex
+        else:
+            self.current_word = self.input_received
        
-        
+       
+        self.auto_complete(self.current_word)
+
+
+     # Handles auto complete logic
+    def auto_complete(self, word_to_automate):            
+                                                      
+        word_to_automate = self.current_word       
+        logging.debug(F" Word is {word_to_automate}")
+        node_a = self.trie.startswith(word_to_automate)
+       
+           
         try: 
-             
-            if node:                
-                suggestions = self.trie.get_suggestions_from_node(node)
-                self.optionsmenu = tk.Listbox(self)
-                self.optionsmenu.bind('<KeyRelease>', self.auto_complete)
+             # Creates list box for suggestions
+            if node_a:                
+                suggestions = self.trie.get_suggestions_from_node(node_a)
+                               
                 self.optionsmenu.delete(0, tk.END)
-                 # If suggestions then place suggestion box dynamically
+                 # For suggestions in lsit box
                 for suggestion in suggestions:
                    
                     self.optionsmenu.insert(tk.END, suggestion)
-                    self.optionsmenu.place(x=600, y=229)
+                self.optionsmenu.place(x=600, y=229)
+           
+                
+                
                 
             else:
                 logging.debug(f"No suggestions for: {word_to_automate}")
-            self.optionsmenu.place_forget()
-        except TypeError as e:
+                self.optionsmenu.place_forget()
+        except (TypeError, KeyError, IndexError) as e:
             logging.debug(f"Type error: {e}")
 
+
+
+     # Retrieve clicked suggestion from list box
+    def clicked_suggestion(self , selected_index):
+        selected_index = self.optionsmenu.curselection()    
+        if selected_index:
+            selected_item = self.optionsmenu.get(selected_index[0])
+            last_space_index = self.input_received.rfind(' ')
+            self.entrybox.delete(last_space_index + 1,tk.END)
+            self.entrybox.insert(tk.END,  selected_item)  
+           
+
+    
+
+    
     def populatetrie(self, words):
         self.word_source.listofwords()
          # Inserts words from wordsource to trie structure
         for words in self.word_source.listofwords():
             self.trie.insertchar(words)
             
-            
-
-
-        
-        
-    
-            
-
-
-
-
-
-
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
+                           
    
      # Sets background for interface
     def add_background(self):
@@ -135,22 +136,6 @@ class interface(tk.Tk):
         self.bglabel = tk.Label(self, image= self.bg)
         self.bglabel.place(x=0, y=0)
         
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
  # Main Loop
