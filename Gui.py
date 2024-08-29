@@ -99,6 +99,7 @@ class interface(tk.Tk):
             if node_a:                
                 suggestions = self.trie.get_suggestions_from_node(node_a)                               
                 self.optionsmenu.delete(0, tk.END)
+                
                  # For suggestions in lsit box
                 for suggestion in suggestions:
                    
@@ -121,13 +122,15 @@ class interface(tk.Tk):
         selected_index = self.optionsmenu.curselection()    
         if selected_index:
             selected_item = self.optionsmenu.get(selected_index[0])
-            last_space_index = self.input_received.rfind(' ')
-            self.entrybox.delete(last_space_index + 1,tk.END)
-            self.entrybox.insert(tk.END,  selected_item)  
+            adjusted_selection = selected_item[1:]
+            self.entrybox.delete(self.currentindex(),tk.END)
+            self.entrybox.insert(tk.END, adjusted_selection)      
             self.optionsmenu.place_forget()
 
            
-
+    def currentindex(self):
+        self.current_index = self.entrybox.index(tk.INSERT)
+        return self.current_index
     
 
     

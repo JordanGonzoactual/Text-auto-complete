@@ -77,11 +77,11 @@ class Trie(object):
             if current.is_word:
 
                 suggestions.append(prefix + current.char)  # Collect the word here
-                logging.debug(f"Apending char:{current.char}")
+                
         
         for child in current.children.values():
             suggestions.extend(self.get_suggestions_from_node(child, prefix + current.char))
-            logging.debug(f"Getting suggestions :{suggestions}")
+            logging.debug(f"Getting suggestions :{list(suggestions)}")
             
         return suggestions    
  
